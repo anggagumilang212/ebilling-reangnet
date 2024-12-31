@@ -40,6 +40,8 @@ class PPPoEController extends Controller
 
 	public function add(Request $request)
 	{
+
+
 		$ip = session()->get('ip');
 		$user = session()->get('user');
 		$password = session()->get('password');

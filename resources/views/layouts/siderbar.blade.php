@@ -20,6 +20,33 @@
                         <p>Interface</p>
                     </a>
                 </li>
+                <li class="nav-item {{ $menu == 'keloladata' ? 'active' : ''  }}">
+                    <a data-toggle="collapse" href="#keloladata">
+                        <i class="fas fa-server"></i>
+                        <p>Kelola Data</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="keloladata">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="{{ route('pelanggan.index') }}">
+                                    <span class="sub-item {{ $submenu == 'pelanggan' ? 'active' : ''  }}">Data Pelanggan</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('router.index') }}">
+                                    <span class="sub-item {{ $submenu == 'router' ? 'active' : ''  }}">Data Router</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('package.index') }}">
+                                    <span class="sub-item {{ $submenu == 'paket' ? 'active' : ''  }}">Data Paket</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </li>
                 <li class="nav-item {{ $menu == 'pppoe' ? 'active' : ''  }}">
                     <a data-toggle="collapse" href="#base">
                         <i class="fas fa-rocket"></i>

@@ -1,6 +1,5 @@
 <?php
 
-namespace App\Models;
 namespace App\Http\Controllers;
 
 use App\Models\Report;

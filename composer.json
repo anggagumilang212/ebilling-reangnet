@@ -11,6 +11,8 @@
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "pear2/cache_shm": "^0.2.0",
+        "pear2/net_routeros": "^1.0@beta",
         "realrashid/sweet-alert": "^5.0"
     },
     "require-dev": {

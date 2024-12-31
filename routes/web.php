@@ -4,8 +4,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HotspotController;
 use App\Http\Controllers\InterfaceController;
+use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PPPoEController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\RouterController;
 use App\Http\Controllers\UseractiveController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,6 +43,30 @@ Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard.
 // Check Traffic Interface
 Route::get('interface', [InterfaceController::class, 'index'])->name('interface.index');
 
+
+// Fitur Pelanggan
+Route::get('pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
+Route::get('pelanggan/create', [PelangganController::class, 'create'])->name('pelanggan.create');
+Route::post('pelanggan/add', [PelangganController::class, 'add'])->name('pelanggan.add');
+Route::get('pelanggan/edit/{id}', [PelangganController::class, 'edit'])->name('pelanggan.edit');
+Route::post('pelanggan/update', [PelangganController::class, 'update'])->name('pelanggan.update');
+Route::get('pelanggan/delete/{id}', [PelangganController::class, 'delete'])->name('pelanggan.delete');
+
+// Fitur Router
+Route::get('router', [RouterController::class, 'index'])->name('router.index');
+Route::post('router/add', [RouterController::class, 'add'])->name('router.add');
+Route::post('router/update/{id}', [RouterController::class, 'update'])->name('router.update');
+Route::get('router/delete/{id}', [RouterController::class, 'delete'])->name('router.delete');
+Route::get('/router/check/{id}', [RouterController::class, 'checkConnection'])->name('router.check');
+// get profile with router id
+Route::get('/getProfiles/{routerId}', [PelangganController::class, 'getProfiles']);
+// get secret with router id
+Route::get('/getSecrets/{routerId}', [PelangganController::class, 'getSecrets']);
+// get detail secret
+Route::get('/get-secret-details/{secretName}', [PelangganController::class, 'getSecretDetails'])->name('get.secret.details');
+// fitur isolir
+Route::post('/isolir/{id}', [PelangganController::class, 'isolir'])->name('isolir');
+Route::post('/bukaisolir/{id}', [PelangganController::class, 'bukaIsolir'])->name('bukaisolir');
 // Fitur PPPoE
 Route::get('pppoe/secret', [PPPoEController::class, 'secret'])->name('pppoe.secret');
 Route::get('pppoe/secret/active', [PPPoEController::class, 'active'])->name('pppoe.active');
@@ -55,6 +82,13 @@ Route::post('hotspot/users/add', [HotspotController::class, 'add'])->name('hotsp
 Route::get('hotspot/users/edit/{id}', [HotspotController::class, 'edit'])->name('hotspot.edit');
 Route::post('hotspot/users/update', [HotspotController::class, 'update'])->name('hotspot.update');
 Route::get('hotspot/users/delete/{id}', [HotspotController::class, 'delete'])->name('hotspot.delete');
+
+
+// Fitur Package
+Route::get('package', [PackageController::class, 'index'])->name('package.index');
+Route::post('package/add', [PackageController::class, 'add'])->name('package.add');
+Route::post('package/update/{id}', [PackageController::class, 'update'])->name('package.update');
+Route::get('package/delete/{id}', [PackageController::class, 'delete'])->name('package.delete');
 
 // Realtime
 Route::get('dashboard/cpu', [DashboardController::class, 'cpu'])->name('dashboard.cpu');
