@@ -14,12 +14,12 @@
                     </span>
                     <h4 class="text-section">Components</h4>
                 </li>
-                <li class="nav-item {{ $menu == 'interface' ? 'active' : ''  }}">
+                {{-- <li class="nav-item {{ $menu == 'interface' ? 'active' : ''  }}">
                     <a href="{{ route('interface.index') }}">
                         <i class="fas fa-layer-group"></i>
                         <p>Interface</p>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item {{ $menu == 'keloladata' ? 'active' : ''  }}">
                     <a data-toggle="collapse" href="#keloladata">
                         <i class="fas fa-server"></i>
@@ -47,7 +47,7 @@
                     </div>
 
                 </li>
-                <li class="nav-item {{ $menu == 'pppoe' ? 'active' : ''  }}">
+                {{-- <li class="nav-item {{ $menu == 'pppoe' ? 'active' : ''  }}">
                     <a data-toggle="collapse" href="#base">
                         <i class="fas fa-rocket"></i>
                         <p>PPPoE</p>
@@ -68,8 +68,8 @@
                         </ul>
                     </div>
 
-                </li>
-                <li class="nav-item {{ $menu == 'hotspot' ? 'active' : ''  }}">
+                </li> --}}
+                {{-- <li class="nav-item {{ $menu == 'hotspot' ? 'active' : ''  }}">
                     <a data-toggle="collapse" href="#base1">
                         <i class="fas fa-wifi"></i>
                         <p>Hotspot</p>
@@ -89,8 +89,8 @@
                             </li>
                         </ul>
                     </div>
-                </li>
-                <li class="nav-item {{ $menu == 'report' ? 'active' : ''  }}">
+                </li> --}}
+                {{-- <li class="nav-item {{ $menu == 'report' ? 'active' : ''  }}">
                     <a data-toggle="collapse" href="#base3">
                         <i class="fas fa-paste"></i>
                         <p>Report</p>
@@ -110,13 +110,13 @@
                             </li>
                         </ul>
                     </div>
-                </li>
-                <li class="nav-item {{ $menu == 'useractive' ? 'active' : ''  }}">
+                </li> --}}
+                {{-- <li class="nav-item {{ $menu == 'useractive' ? 'active' : ''  }}">
                     <a href="{{ route('user.index') }}">
                         <i class="fas fa-user-alt"></i>
                         <p>User Mikrotik Active</p>
                     </a>
-                </li>
+                </li> --}}
             </ul>
         </div>
     </div>
