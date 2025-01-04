@@ -201,15 +201,14 @@
                                                         <i class="fa fa-wifi"></i>
                                                     </a>
                                                     <a href="javascript:void(0)"
-                                                    class="btn btn-link btn-primary btn-lg btn-edit-router"
-                                                     data-original-title="Edit"
-                                                    data-id="{{ $item->id }}"
-                                                    data-name="{{ $item->name }}"
-                                                    data-ip="{{ $item->ip }}"
-                                                    data-username="{{ $item->username }}"
-                                                    data-password="{{ $item->password }}">
-                                                     <i class="fa fa-edit"></i>
-                                                 </a>
+                                                        class="btn btn-link btn-primary btn-lg btn-edit-router"
+                                                        data-toggle="tooltip" data-original-title="Edit"
+                                                        data-id="{{ $item->id }}" data-name="{{ $item->name }}"
+                                                        data-ip="{{ $item->ip }}"
+                                                        data-username="{{ $item->username }}"
+                                                        data-password="{{ $item->password }}">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
 
 
                                                     <a href="{{ route('router.delete', $item->id) }}" type="button"
@@ -234,8 +233,8 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            $('.btn-edit-router').on('click', function () {
+        document.addEventListener('DOMContentLoaded', function() {
+            $('.btn-edit-router').on('click', function() {
                 const id = $(this).data('id');
                 const name = $(this).data('name');
                 const ip = $(this).data('ip');

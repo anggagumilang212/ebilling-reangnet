@@ -94,7 +94,9 @@ class PembayaranController extends Controller
             }
 
             Alert::success('Success', 'Berhasil menambahkan Pembayaran.');
-            return redirect()->route('pembayaran.index');
+            return redirect()->route('pembayaran.index')->with([
+                'print_pembayaran_id' => $pembayaran->id
+            ]);
         } catch (\Exception $e) {
             Log::error('Error dalam proses pembayaran: ' . $e->getMessage());
             Alert::error('Error', 'Terjadi kesalahan dalam proses pembayaran.');
@@ -168,5 +170,18 @@ class PembayaranController extends Controller
         }
 
         return view('pembayaran.index', compact('pembayaran', 'status', 'periode'));
+    }
+
+    public function invoice($id)
+    {
+        $pembayaran = Pembayaran::with(['pelanggan.package'])->findOrFail($id);
+        return view('pembayaran.invoice', compact('pembayaran'));
+    }
+    public function delete($id)
+    {
+        $pembayaran = Pembayaran::findOrFail($id);
+        $pembayaran->delete();
+        Alert::success('Berhasil', 'Pembayaran berhasil dihapus.');
+        return redirect()->route('pembayaran.index');
     }
 }

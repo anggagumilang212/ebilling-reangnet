@@ -228,6 +228,7 @@
 
                                                         <a href="javascript:void(0)"
                                                             class="btn btn-link btn-primary btn-lg btn-edit-router"
+                                                            data-toggle="tooltip" data-original-title="Edit"
                                                             data-id="{{ $item->id }}"
                                                             data-nama="{{ $item->nama }}"
                                                             data-kecepatan="{{ $item->kecepatan }}"
@@ -240,7 +241,7 @@
 
                                                         <a href="{{ route('package.delete', $item->id) }}" type="button"
                                                             data-toggle="tooltip" class="btn btn-link btn-danger"
-                                                            data-original-title="Remove"
+                                                            data-original-title="Hapus"
                                                             onclick="return confirm('Apakah anda yakin menghapus router {{ $item->nama }} ?')">
                                                             <i class="fa fa-times"></i>
                                                         </a>

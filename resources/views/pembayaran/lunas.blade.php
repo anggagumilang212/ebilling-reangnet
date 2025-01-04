@@ -65,7 +65,7 @@
                                             <td>{{ $loop->iteration }} </td>
                                             <td>{{ $item->nama ?? '' }} </td>
                                             <td>{{ $item->no_hp ?? '' }} </td>
-                                            <td>{{ $item->tgl_daftar ?? '' }} </td>
+                                            <td>{{ Carbon\Carbon::parse($item->tgl_daftar)->format('d F Y') }} </td>
                                             <td class="text-center">
                                                 <img src="{{ $item->ktp ?? '' }}" alt=""
                                                     style="width: 50px">
@@ -95,7 +95,7 @@
                                                 <div class="form-button-action d-flex flex-wrap gap-1"
                                                     style="min-width: 200px;">
                                                     <a href="{{ route('pembayaran.create', $item->id) }}"
-                                                        class="btn btn-link btn-primary btn-md p-1" data-toggle="tooltip"
+                                                        class="btn btn-link btn-primary btn-lg p-1" data-toggle="tooltip"
                                                         data-original-title="Pembayaran">
                                                         <i class="fa fa-money-bill"></i>
                                                     </a>

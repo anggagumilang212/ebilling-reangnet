@@ -190,20 +190,27 @@
 
                                             <td>
                                                 <div class="form-button-action">
+
+                                                    @if ($item->status == 'Lunas')
+                                                        <a href="{{ route('pembayaran.invoice', $item->id) }}"
+                                                            class="btn btn-link btn-warning btn-lg" data-toggle="tooltip"
+                                                            data-original-title="Print Invoice" target="_blank">
+                                                            <i class="fa fa-print"></i>
+                                                        </a>
+                                                    @endif
                                                     {{-- <a href="javascript:void(0)"
                                                         class="btn btn-link btn-primary btn-lg btn-edit-router"
-                                                        data-original-title="Edit" data-id="{{ $item->id }}"
-                                                        data-name="{{ $item->name }}" data-ip="{{ $item->ip }}"
-                                                        data-username="{{ $item->username }}"
-                                                        data-password="{{ $item->password }}">
+                                                        data-original-title="Edit">
                                                         <i class="fa fa-edit"></i>
                                                     </a> --}}
-                                                    {{-- <a href="{{ route('router.delete', $item->id) }}" type="button"
-                                                        data-toggle="tooltip" class="btn btn-link btn-danger"
+
+                                                    <a href="{{ route('pembayaran.delete', $item->id) }}"
+                                                        class="btn btn-link btn-danger btn-lg" data-toggle="tooltip"
                                                         data-original-title="Hapus"
-                                                        onclick="return confirm('Apakah anda yakin menghapus router {{ $item->name }} ?')">
+                                                        onclick="return confirm('Apakah anda yakin menghapus Pembayaran {{ $item->pelanggan->nama }} Periode {{ $item->periode }} ?')">
                                                         <i class="fa fa-times"></i>
-                                                    </a> --}}
+                                                    </a>
+
                                                 </div>
                                             </td>
                                         </tr>
@@ -232,6 +239,21 @@
         // datepicker.datepicker('setDate', new Date());
     </script>
 
+    @if (session('print_pembayaran_id'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                // Buka halaman print
+                var printWindow = window.open('{{ route('pembayaran.invoice', session('print_pembayaran_id')) }}');
+
+                // Otomatis cetak
+                printWindow.onload = function() {
+                    printWindow.print();
+                    // Opsional: Tutup window setelah print
+                    // printWindow.close();
+                };
+            });
+        </script>
+    @endif
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             $('.btn-edit-router').on('click', function() {

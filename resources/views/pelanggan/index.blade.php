@@ -280,7 +280,7 @@
                                             <td>{{ $loop->iteration }} </td>
                                             <td>{{ $item->nama ?? '' }} </td>
                                             <td>{{ $item->no_hp ?? '' }} </td>
-                                            <td>{{ $item->tgl_daftar ?? '' }} </td>
+                                            <td>{{ Carbon\Carbon::parse($item->tgl_daftar)->format('d F Y') }} </td>
                                             <td class="text-center">
                                                 {{-- <img src="{{ $item->ktp ?? '' }}" alt=""
                                                     style="width: 50px"> --}}
@@ -310,12 +310,14 @@
                                                 <div class="form-button-action d-flex flex-wrap gap-1"
                                                     style="min-width: 200px;">
                                                     <button class="btn btn-link btn-danger btn-isolir btn-md p-1"
-                                                        data-original-title="Isolir" data-id="{{ $item->id }}">
+                                                        data-toggle="tooltip" data-original-title="Isolir"
+                                                        data-id="{{ $item->id }}">
                                                         <i class="fa fa-lock"></i>
                                                     </button>
 
                                                     <button class="btn btn-link btn-success btn-bukaisolir btn-md p-1"
-                                                        data-original-title="Buka Isolir" data-id="{{ $item->id }}">
+                                                        data-toggle="tooltip" data-original-title="Buka Isolir"
+                                                        data-id="{{ $item->id }}">
                                                         <i class="fa fa-unlock"></i>
                                                     </button>
 

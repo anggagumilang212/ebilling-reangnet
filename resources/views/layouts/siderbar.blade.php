@@ -80,6 +80,27 @@
                     </div>
 
                 </li>
+
+                <li class="nav-item {{ $menu == 'laporan' ? 'active' : ''  }}">
+                    <a data-toggle="collapse" href="#laporan">
+                        <i class="fas fa-clipboard"></i>
+                        <p>Laporan</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="laporan">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="#">
+                                    <span class="sub-item {{ $submenu == 'pembayaran' ? 'active' : ''  }}">Belum Jadi</span>
+                                </a>
+                            </li>
+                          
+                           
+
+                        </ul>
+                    </div>
+
+                </li>
                 {{-- <li class="nav-item {{ $menu == 'pppoe' ? 'active' : ''  }}">
                     <a data-toggle="collapse" href="#base">
                         <i class="fas fa-rocket"></i>

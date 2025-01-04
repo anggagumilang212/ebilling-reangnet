@@ -180,6 +180,7 @@
 
                                                     <a href="javascript:void(0)"
                                                         class="btn btn-link btn-primary btn-lg btn-edit-router"
+                                                        data-toggle="tooltip"
                                                         data-original-title="Edit" data-id="{{ $item->id }}"
                                                         data-kategori="{{ $item->kategori }}"
                                                         data-template_pesan="{{ $item->template_pesan }}">
