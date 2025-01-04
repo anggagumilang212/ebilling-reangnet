@@ -89,7 +89,7 @@
                                             <div class="form-group form-group-default">
                                                 <label>No Hp/WA</label>
                                                 <input name="no_hp" type="text" id="no_hp" class="form-control"
-                                                    placeholder="No Hp/WA" required>
+                                                    placeholder="08xxxxxxxxx" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
@@ -113,6 +113,7 @@
                                             <div class="form-group form-group-default">
                                             <label>Paket Internet</label>
                                             <select name="package_id" class="form-control">
+                                                <option>Pilih</option>
                                                 @foreach ($packages as $package)
                                                     <option value="{{ $package->id }}">{{ $package->nama }} - Rp
                                                         {{ number_format($package->harga, 0, ',', '.') }} - {{ $package->kecepatan }} | {{ $package->router->name }} - {{ $package->profile }}</option>

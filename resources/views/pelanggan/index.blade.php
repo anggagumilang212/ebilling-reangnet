@@ -29,11 +29,10 @@
                                     Add Pelanggan
                                 </button> --}}
 
-                                <a href="{{route('pelanggan.create')}}" class="btn btn-primary btn-round ml-auto"
-                              >
-                                <i class="fa fa-plus"></i>
-                                Add Pelanggan
-                            </a>
+                                <a href="{{ route('pelanggan.create') }}" class="btn btn-primary btn-round ml-auto">
+                                    <i class="fa fa-plus"></i>
+                                    Tambah Pelanggan
+                                </a>
                             </div>
                         </div>
                         <div class="card-body">
@@ -257,6 +256,7 @@
                                         <th>Paket</th>
                                         <th>Status</th>
                                         <th>Alamat</th>
+                                        <th>Pembayaran Terakhir</th>
                                         <th style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
@@ -270,6 +270,7 @@
                                         <th>Paket</th>
                                         <th>Status</th>
                                         <th>Alamat</th>
+                                        <th>Pembayaran Terakhir</th>
                                         <th>Action</th>
                                     </tr>
                                 </tfoot>
@@ -280,33 +281,62 @@
                                             <td>{{ $item->nama ?? '' }} </td>
                                             <td>{{ $item->no_hp ?? '' }} </td>
                                             <td>{{ $item->tgl_daftar ?? '' }} </td>
-                                            <td><img src="{{ $item->ktp ?? '' }}" alt="" style="width: 50px">
+                                            <td class="text-center">
+                                                {{-- <img src="{{ $item->ktp ?? '' }}" alt=""
+                                                    style="width: 50px"> --}}
+                                                <div class="d-flex align-items-center gap-2" style="max-width: 150px;">
+                                                    @if ($item->ktp)
+                                                        <a href="{{ asset($item->ktp) }}"
+                                                            class="btn btn-sm btn-light download-btn"
+                                                            download="{{ basename($item->ktp) }}"
+                                                            onclick="downloadFile(this.href, '{{ basename($item->ktp) }}'); return false;">
+                                                            <i class="fas fa-download me-1"></i>
+                                                            <span class="d-none d-sm-inline">Download</span>
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted small">No file</span>
+                                                    @endif
+                                                </div>
+
                                             </td>
-                                            <td>{{ $item->paket ?? '' }} </td>
+                                            <td>{{ $item->package->nama ?? '' }} </td>
                                             <td>{{ $item->status ?? '' }} </td>
                                             <td>{{ $item->alamat ?? '' }} </td>
                                             <td>
-                                                <div class="form-button-action">
-                                                    <button class="btn btn-link btn-danger btn-isolir btn-lg"
-                                                        data-id="{{ $item->id }}">
+                                                {{ optional($item->pembayaran()->latest()->first())->periode ?? 'Belum ada pembayaran' }}
+                                            </td>
+
+                                            <td>
+                                                <div class="form-button-action d-flex flex-wrap gap-1"
+                                                    style="min-width: 200px;">
+                                                    <button class="btn btn-link btn-danger btn-isolir btn-md p-1"
+                                                        data-original-title="Isolir" data-id="{{ $item->id }}">
                                                         <i class="fa fa-lock"></i>
                                                     </button>
-                                                    <button class="btn btn-link btn-success btn-bukaisolir btn-lg"
-                                                        data-id="{{ $item->id }}">
+
+                                                    <button class="btn btn-link btn-success btn-bukaisolir btn-md p-1"
+                                                        data-original-title="Buka Isolir" data-id="{{ $item->id }}">
                                                         <i class="fa fa-unlock"></i>
                                                     </button>
-                                                    {{-- <a href="{{ route('pppoe.edit', $id) }}"
-                                                        class="btn btn-link btn-primary btn-lg" data-toggle="tooltip"
-                                                        data-original-title="Edit Task">
+
+                                                    <a href="{{ route('pembayaran.create', $item->id) }}"
+                                                        class="btn btn-link btn-primary btn-md p-1" data-toggle="tooltip"
+                                                        data-original-title="Pembayaran">
+                                                        <i class="fa fa-money-bill"></i>
+                                                    </a>
+
+                                                    <a href="{{ route('pelanggan.edit', $item->id) }}"
+                                                        class="btn btn-link btn-primary btn-md p-1" data-toggle="tooltip"
+                                                        data-original-title="Edit">
                                                         <i class="fa fa-edit"></i>
                                                     </a>
 
-                                                    <a href="{{ route('pppoe.delete', $id) }}" type="button"
-                                                        data-toggle="tooltip" class="btn btn-link btn-danger"
-                                                        data-original-title="Remove"
-                                                        onclick="return confirm('Apakah anda yakin menghapus secret {{ $data['name'] }} ?')">
+                                                    <a href="{{ route('pelanggan.delete', $item->id) }}"
+                                                        class="btn btn-link btn-danger btn-md p-1" data-toggle="tooltip"
+                                                        data-original-title="Hapus"
+                                                        onclick="return confirm('Apakah anda yakin menghapus router {{ $item->nama }} ?')">
                                                         <i class="fa fa-times"></i>
-                                                    </a> --}}
+                                                    </a>
                                                 </div>
                                             </td>
                                         </tr>
@@ -535,7 +565,7 @@
                         return {
                             results: data.secrets.map(secret => ({
                                 id: secret
-                                .name, // Adjust the key based on your data structure
+                                    .name, // Adjust the key based on your data structure
                                 text: secret
                                     .name // Adjust the key based on your data structure
                             }))
@@ -545,7 +575,7 @@
                         console.error('Error fetching secrets:', errorThrown);
                     }
                 },
-                // dropdownParent: $('.form-group-default') 
+                // dropdownParent: $('.form-group-default')
             });
 
             // Reinitialize Select2 when router_id changes

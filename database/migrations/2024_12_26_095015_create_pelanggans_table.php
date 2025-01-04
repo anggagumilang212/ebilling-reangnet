@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('titik_koordinat')->nullable();
             $table->string('alamat');
             $table->string('status')->default('aktif');
-            $table->string('paket')->default('default');
+            $table->string('service')->default('default');
             $table->string('profile')->default('default');
             $table->string('username_pppoe');
             $table->string('local_address');

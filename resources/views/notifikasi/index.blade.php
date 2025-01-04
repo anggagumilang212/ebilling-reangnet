@@ -1,6 +1,6 @@
-@extends('layouts.layouts', ['menu' => 'keloladata', 'submenu' => 'router'])
+@extends('layouts.layouts', ['menu' => 'keloladata', 'submenu' => 'notifikasi'])
 
-@section('title', 'Data Router')
+@section('title', 'Data Notifikasi')
 
 @section('content')
 
@@ -13,7 +13,7 @@
                     <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row">
                         <div>
                             <h2 class="text-white pb-2 fw-bold">@yield('title')</h2>
-                            <h5 class="text-white op-7 mb-2">Total Router : {{ $router->count() }} </h5>
+                            <h5 class="text-white op-7 mb-2">Total Notifikasi : {{ $notifikasi->count() }} </h5>
                         </div>
                         <div class="ml-md-auto py-2 py-md-0">
                         </div>
@@ -29,7 +29,7 @@
                                 <button class="btn btn-primary btn-round ml-auto" data-toggle="modal"
                                     data-target="#addRowModal">
                                     <i class="fa fa-plus"></i>
-                                    Tambah Router
+                                    Tambah Notifikasi
                                 </button>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                                                 <span class="fw-mediumbold">
                                                     New</span>
                                                 <span class="fw-light">
-                                                    Router
+                                                    Notifikasi
                                                 </span>
                                             </h5>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -52,40 +52,33 @@
                                         </div>
                                         <div class="modal-body">
                                             <!-- <p class="small">Create a new row using this form, make sure you fill them all</p> -->
-                                            <form action="{{ route('router.add') }}" method="POST">
+                                            <form action="{{ route('notifikasi.add') }}" method="POST">
                                                 @csrf
                                                 <div class="row">
 
                                                     <div class="col-sm-12">
                                                         <div class="form-group form-group-default">
-                                                            <label>Nama Router</label>
-                                                            <input name="name" type="text" id="user"
-                                                                class="form-control" placeholder="Nama" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default">
-                                                            <label>IP Address</label>
-                                                            <input name="ip" type="text" id="user"
-                                                                class="form-control" placeholder="Ip Address" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Username</label>
-                                                            <input name="username" type="text" id="username"
-                                                                class="form-control" placeholder="Username" required>
+                                                            <label>Kategori</label>
+                                                            <select name="kategori" id="" class="form-control" >
+                                                                <option value="">Pilih</option>
+                                                                <option value="pelanggan_baru">Pelanggan Baru</option>
+                                                                <option value="pembayaran_berhasil">Pembayaran Berhasil
+                                                                </option>
+                                                                <option value="isolir">Isolir</option>
+                                                                <option value="peringatan_jatuh_tempo">Peringatan Jatuh
+                                                                    Tempo</option>
+                                                                <option value="internet_aktif">Internet Aktif</option>
+                                                            </select>
                                                         </div>
                                                     </div>
 
-
                                                     <div class="col-sm-12">
                                                         <div class="form-group form-group-default">
-                                                            <label>Password</label>
-                                                            <input name="password" type="text" id="password"
-                                                                class="form-control" placeholder="Password" required>
+                                                            <label>Pesan</label>
+                                                            <textarea name="template_pesan" class="form-control" cols="30" rows="10"></textarea>
                                                         </div>
                                                     </div>
+
                                                 </div>
                                         </div>
                                         <div class="modal-footer no-bd">
@@ -113,39 +106,35 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="editRouterForm" method="POST">
+                                            <form id="editNotifikasiForm" method="POST">
                                                 @csrf
 
-                                                <input type="hidden" name="id" id="editRouterId">
+                                                <input type="hidden" name="id" id="editNotifikasiId">
                                                 <div class="row">
+
                                                     <div class="col-sm-12">
                                                         <div class="form-group form-group-default">
-                                                            <label>Nama Router</label>
-                                                            <input name="name" type="text" id="editRouterName"
-                                                                class="form-control" required>
+                                                            <label>Kategori</label>
+                                                            <select name="kategori" id="editNotifikasiKategori" class="form-control">
+                                                                <option value="pelanggan_baru">Pelanggan Baru</option>
+                                                                <option value="pembayaran_berhasil">Pembayaran Berhasil
+                                                                </option>
+                                                                <option value="isolir">Isolir</option>
+                                                                <option value="peringatan_jatuh_tempo">Peringatan Jatuh
+                                                                    Tempo</option>
+                                                                <option value="internet_aktif">Internet Aktif</option>
+                                                            </select>
                                                         </div>
                                                     </div>
+
                                                     <div class="col-sm-12">
                                                         <div class="form-group form-group-default">
-                                                            <label>IP Address</label>
-                                                            <input name="ip" type="text" id="editRouterIp"
-                                                                class="form-control" required>
+                                                            <label>Pesan</label>
+                                                            <textarea name="template_pesan" id="editNotifikasiTemplate" class="form-control" cols="30" rows="10"></textarea>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Username</label>
-                                                            <input name="username" type="text" id="editRouterUsername"
-                                                                class="form-control" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Password</label>
-                                                            <input name="password" type="text" id="editRouterPassword"
-                                                                class="form-control" required>
-                                                        </div>
-                                                    </div>
+
+
                                                 </div>
                                         </div>
                                         <div class="modal-footer no-bd">
@@ -167,55 +156,41 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama</th>
-                                        <th>Ip Address</th>
-                                        <th>Username</th>
-                                        <th>Password</th>
+                                        <th>Kategori</th>
+                                        <th>Pesan</th>
                                         <th style="width: 10%">Action</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>No</th>
-                                        <th>Nama</th>
-                                        <th>Ip Address</th>
-                                        <th>Username</th>
-                                        <th>Password</th>
+                                        <th>Kategori</th>
+                                        <th>Pesan</th>
                                         <th>Action</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    @foreach ($router as $item)
+                                    @foreach ($notifikasi as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }} </td>
-                                            <td>{{ $item->name ?? '' }} </td>
-                                            <td>{{ $item->ip ?? '' }} </td>
-                                            <td>{{ $item->username ?? '' }} </td>
-                                            <td>{{ $item->password ?? '' }} </td>
-
+                                            <td>{{ $item->kategori ?? '' }} </td>
+                                            <td>{{ $item->template_pesan ?? '' }} </td>
                                             <td>
                                                 <div class="form-button-action">
-                                                    <a href="{{ route('router.check', $item->id) }}"
-                                                        class="btn btn-link btn-info" data-toggle="tooltip"
-                                                        data-original-title="Cek Koneksi">
-                                                        <i class="fa fa-wifi"></i>
-                                                    </a>
+
                                                     <a href="javascript:void(0)"
-                                                    class="btn btn-link btn-primary btn-lg btn-edit-router"
-                                                     data-original-title="Edit"
-                                                    data-id="{{ $item->id }}"
-                                                    data-name="{{ $item->name }}"
-                                                    data-ip="{{ $item->ip }}"
-                                                    data-username="{{ $item->username }}"
-                                                    data-password="{{ $item->password }}">
-                                                     <i class="fa fa-edit"></i>
-                                                 </a>
+                                                        class="btn btn-link btn-primary btn-lg btn-edit-router"
+                                                        data-original-title="Edit" data-id="{{ $item->id }}"
+                                                        data-kategori="{{ $item->kategori }}"
+                                                        data-template_pesan="{{ $item->template_pesan }}">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
 
 
-                                                    <a href="{{ route('router.delete', $item->id) }}" type="button"
+                                                    <a href="{{ route('notifikasi.delete', $item->id) }}" type="button"
                                                         data-toggle="tooltip" class="btn btn-link btn-danger"
                                                         data-original-title="Hapus"
-                                                        onclick="return confirm('Apakah anda yakin menghapus router {{ $item->name }} ?')">
+                                                        onclick="return confirm('Apakah anda yakin menghapus notif {{ $item->name }} ?')">
                                                         <i class="fa fa-times"></i>
                                                     </a>
                                                 </div>
@@ -234,24 +209,21 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            $('.btn-edit-router').on('click', function () {
+        document.addEventListener('DOMContentLoaded', function() {
+            $('.btn-edit-router').on('click', function() {
                 const id = $(this).data('id');
-                const name = $(this).data('name');
-                const ip = $(this).data('ip');
-                const username = $(this).data('username');
-                const password = $(this).data('password');
-                const actionUrl = "{{ route('router.update', ':id') }}".replace(':id', id);
+                const kategori = $(this).data('kategori');
+                const template_pesan = $(this).data('template_pesan');
+
+                const actionUrl = "{{ route('notifikasi.update', ':id') }}".replace(':id', id);
 
                 // Set data ke modal
-                $('#editRouterId').val(id);
-                $('#editRouterName').val(name);
-                $('#editRouterIp').val(ip);
-                $('#editRouterUsername').val(username);
-                $('#editRouterPassword').val(password);
+                $('#editNotifikasiId').val(id);
+                $('#editNotifikasiKategori').val(kategori);
+                $('#editNotifikasiTemplate').val(template_pesan);
 
                 // Set action form
-                $('#editRouterForm').attr('action', actionUrl);
+                $('#editNotifikasiForm').attr('action', actionUrl);
 
                 // Buka modal
                 $('#editRowModal').modal('show');

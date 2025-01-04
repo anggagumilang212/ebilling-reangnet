@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Carbon\Carbon;
 use RouterOS\Query;
 use App\Models\Router;
 use App\Models\Package;
@@ -11,7 +12,9 @@ use App\Models\Pelanggan;
 use PEAR2\Cache\SHM\Cache;
 use App\Models\RouterosAPI;
 use Illuminate\Http\Request;
+use App\Helpers\MessageHelper;
 use PEAR2\Net\RouterOS\Client;
+use App\Services\WhatsappService;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -51,8 +54,14 @@ class PelangganController extends Controller
             }
         }
 
-        $pelanggan = Pelanggan::all();
-        return view('pelanggan.index', $data, compact('pelanggan'));
+        // Ambil periode saat ini 
+        $periode = Carbon::now()->translatedFormat('F Y');
+
+        $pelanggan = Pelanggan::with(['pembayaran' => function ($query) use ($periode) {
+            $query->where('periode', $periode);
+        }])->get();
+
+        return view('pelanggan.index', $data, compact('pelanggan', 'periode'));
     }
 
     public function create()
@@ -90,7 +99,7 @@ class PelangganController extends Controller
 
         $pelanggan = Pelanggan::all();
         $packages = Package::all();
-        return view('pelanggan.create', $data, compact('pelanggan','packages'));
+        return view('pelanggan.create', $data, compact('pelanggan', 'packages'));
     }
 
     public function getProfiles($routerId)
@@ -147,14 +156,13 @@ class PelangganController extends Controller
 
             // Filter secrets berdasarkan search term jika ada
             if (!empty($searchTerm)) {
-                $secrets = array_filter($secrets, function($secret) use ($searchTerm) {
+                $secrets = array_filter($secrets, function ($secret) use ($searchTerm) {
                     return stripos($secret['name'], $searchTerm) !== false;
                 });
             }
 
             // Reset array keys setelah filtering
             $secrets = array_values($secrets);
-
         } else {
             return response()->json(['error' => 'Failed to connect to router'], 500);
         }
@@ -278,6 +286,7 @@ class PelangganController extends Controller
                     'remote_address' => $request->sync_remote_address,
                     'local_address' => $request->sync_local_address,
                     'profile' => $profile, // Pastikan profile sinkron dengan paket
+                    // 'profile' => $request->sync_profile,
                     'service' => $request->sync_service,
 
                 ];
@@ -312,11 +321,25 @@ class PelangganController extends Controller
 
             // Simpan data pelanggan ke database
             $pelanggan = Pelanggan::create(array_merge(
-                $request->only(['nama', 'jenis', 'alamat', 'no_hp', 'tgl_daftar', 'router_id', 'metode', 'titik_koordinat','package_id']),
+                $request->only(['nama', 'jenis', 'alamat', 'no_hp', 'tgl_daftar', 'router_id', 'metode', 'titik_koordinat', 'package_id']),
                 $pppoeDetails,
                 ['ktp' => $ktpPath ?? null]
             ));
 
+            // Siapkan data untuk template
+            $data = [
+                'nama' => $pelanggan->nama,
+                'paket' => $package->nama,
+                'tagihan' => number_format($package->harga, 0, ',', '.'),
+                'tanggal' => now()->format('d-m-Y')
+            ];
+            // Proses template pesan
+            $message = MessageHelper::processTemplate('pelanggan_baru', $data);
+
+            if ($message && $pelanggan->no_hp) {
+                $whatsapp = new WhatsappService();
+                $whatsapp->sendMessage($pelanggan->no_hp, $message);
+            }
             Alert::success('Success', 'Berhasil menambahkan pelanggan.');
             return redirect()->route('pelanggan.index');
         } catch (Exception $e) {
@@ -440,7 +463,7 @@ class PelangganController extends Controller
 
     public function isolir($id)
     {
-        $pelanggan = Pelanggan::with('router')->findOrFail($id);
+        $pelanggan = Pelanggan::with('router', 'package')->findOrFail($id);
 
         // Pastikan router terkait ditemukan
         if (!$pelanggan->router) {
@@ -498,7 +521,7 @@ class PelangganController extends Controller
                     '.id' => $secret[0]['.id'],
                     'local-address' => '0.0.0.0',
                     'remote-address' => '0.0.0.0',
-                  
+
                 ]);
 
 
@@ -510,11 +533,28 @@ class PelangganController extends Controller
                     'profile' => 'ISOLIR',
                 ]);
 
+                // Siapkan data untuk template
+                $data = [
+                    'nama' => $pelanggan->nama,
+                    'paket' => $pelanggan->package->nama,
+                    'tagihan' => number_format($pelanggan->package->harga, 0, ',', '.'),
+                    'tanggal' => now()->format('d-m-Y')
+                ];
+                // Proses template pesan
+                $message = MessageHelper::processTemplate('isolir', $data);
+
+                if ($message && $pelanggan->no_hp) {
+                    $whatsapp = new WhatsappService();
+                    $whatsapp->sendMessage($pelanggan->no_hp, $message);
+                }
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Pelanggan berhasil diisolir.'
                 ]);
             }
+
+
 
             throw new Exception('Gagal terhubung ke Router MikroTik.');
         } catch (Exception $e) {
@@ -552,8 +592,8 @@ class PelangganController extends Controller
 
             if ($API->connect($ip, $user, $password)) {
 
-                 // Hapus active session PPPoE jika ada
-                 $active = $API->comm('/ppp/active/print', [
+                // Hapus active session PPPoE jika ada
+                $active = $API->comm('/ppp/active/print', [
                     '?name' => $pelanggan->username_pppoe
                 ]);
 
@@ -601,6 +641,20 @@ class PelangganController extends Controller
                     'profile' => $profile,
                 ]);
 
+                // Siapkan data untuk template
+                $data = [
+                    'nama' => $pelanggan->nama,
+                    'paket' => $pelanggan->package->nama,
+                    'tagihan' => number_format($pelanggan->package->harga, 0, ',', '.'),
+                    'tanggal' => now()->format('d-m-Y')
+                ];
+                // Proses template pesan
+                $message = MessageHelper::processTemplate('internet_aktif', $data);
+
+                if ($message && $pelanggan->no_hp) {
+                    $whatsapp = new WhatsappService();
+                    $whatsapp->sendMessage($pelanggan->no_hp, $message);
+                }
                 return response()->json([
                     'success' => true,
                     'message' => 'Pelanggan berhasil dibuka isolirnya.'
@@ -618,7 +672,149 @@ class PelangganController extends Controller
         }
     }
 
+    public function edit($id)
+    {
+        $routers = Router::all();
+        $pelanggan = Pelanggan::findOrFail($id); // Get specific pelanggan
+        $packages = Package::all();
+
+        $API = new RouterosAPI();
+        $API->debug = false;
+
+        $data = [
+            'menu' => 'PPPoE',
+            'totalsecret' => 0,
+            'secret' => [],
+            'profile' => [],
+            'routers' => $routers,
+            'pelanggan' => $pelanggan, // Add pelanggan to data array
+            'packages' => $packages    // Add packages to data array
+        ];
+
+        foreach ($routers as $router) {
+            if ($API->connect($router->ip, $router->username, $router->password)) {
+                $secrets = $API->comm('/ppp/secret/print');
+                $profiles = $API->comm('/ppp/profile/print');
+
+                $data['totalsecret'] += count($secrets);
+                $data['secret'] = array_merge($data['secret'], $secrets);
+                $data['profile'] = array_merge($data['profile'], $profiles);
+
+                $API->disconnect();
+            } else {
+                $data['failed_routers'][] = $router->ip;
+            }
+        }
+
+        return view('pelanggan.edit', $data);
+    }
+
+    public function update(Request $request)
+    {
+        try {
+            // Cari pelanggan berdasarkan ID yang dikirim dari form
+            $pelanggan = Pelanggan::findOrFail($request->id);
+
+            // Handle KTP file update
+            if ($request->hasFile('ktp')) {
+                // Delete old KTP file
+                if ($pelanggan->ktp && file_exists(public_path($pelanggan->ktp))) {
+                    unlink(public_path($pelanggan->ktp));
+                }
+
+                $fileName = $request->file('ktp')->getClientOriginalName();
+                $filePath = public_path('ktp');
+                $request->file('ktp')->move($filePath, $fileName);
+                $ktpPath = 'ktp/' . $fileName;
+            }
+
+            // Get package and profile
+            $package = Package::findOrFail($request->package_id);
+            $profile = $package->profile;
+
+            // Get router
+            $router = Router::findOrFail($request->router_id);
+
+            // Connect to RouterOS
+            $API = new RouterosAPI();
+            $API->debug = false;
+
+            if (!$API->connect($router->ip, $router->username, $router->password)) {
+                throw new Exception('Gagal terhubung ke router.');
+            }
+
+            // Update PPPoE details based on method
+            if ($request->metode === 'sinkronisasi') {
+                $pppoeDetails = [
+                    'username_pppoe' => $request->sync_username,
+                    'remote_address' => $request->sync_remote_address,
+                    'local_address' => $request->sync_local_address,
+                    'profile' => $profile,
+                    'service' => $request->sync_service,
+                ];
+            } else {
+                // Find and update existing secret
+                $secrets = $API->comm('/ppp/secret/print', [
+                    '?name' => $pelanggan->username_pppoe
+                ]);
+
+                if (count($secrets) > 0) {
+                    $secretId = $secrets[0]['.id'];
+                    $parameters = [
+                        '.id' => $secretId,
+                        'name' => $request->user,
+                        'password' => $request->password,
+                        'service' => $request->service ?? 'any',
+                        'profile' => $profile,
+                        'comment' => $request->comment ?? '',
+                    ];
+
+                    if ($request->localaddress) {
+                        $parameters['local-address'] = $request->localaddress;
+                    }
+                    if ($request->remoteaddress) {
+                        $parameters['remote-address'] = $request->remoteaddress;
+                    }
+
+                    $API->comm('/ppp/secret/set', $parameters);
+                }
+
+                $pppoeDetails = [
+                    'username_pppoe' => $request->user,
+                    'remote_address' => $request->remoteaddress,
+                    'local_address' => $request->localaddress,
+                    'profile' => $profile,
+                    'service' => $request->service,
+                ];
+            }
+
+            // Update database record
+            $pelanggan->update(array_merge(
+                $request->only(['nama', 'jenis', 'alamat', 'no_hp', 'tgl_daftar', 'router_id', 'metode', 'titik_koordinat', 'package_id']),
+                $pppoeDetails,
+                ['ktp' => $ktpPath ?? $pelanggan->ktp]
+            ));
+
+            Alert::success('Success', 'Berhasil mengupdate pelanggan.');
+            return redirect()->route('pelanggan.index');
+        } catch (Exception $e) {
+            Alert::error('Error', $e->getMessage());
+            return redirect()->back();
+        } finally {
+            if (isset($API) && $API->connected) {
+                $API->disconnect();
+            }
+        }
+    }
 
 
 
+
+    public function delete($id)
+    {
+        $pelanggan = Pelanggan::findOrFail($id);
+        $pelanggan->delete();
+        Alert::success('Berhasil', 'Pelanggan berhasil dihapus.');
+        return redirect()->route('pelanggan.index');
+    }
 }

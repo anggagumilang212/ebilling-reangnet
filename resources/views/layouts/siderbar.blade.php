@@ -12,7 +12,7 @@
                     <span class="sidebar-mini-icon">
                         <i class="fa fa-ellipsis-h"></i>
                     </span>
-                    <h4 class="text-section">Components</h4>
+                    <h4 class="text-section">Menu</h4>
                 </li>
                 {{-- <li class="nav-item {{ $menu == 'interface' ? 'active' : ''  }}">
                     <a href="{{ route('interface.index') }}">
@@ -43,6 +43,39 @@
                                     <span class="sub-item {{ $submenu == 'paket' ? 'active' : ''  }}">Data Paket</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('notifikasi.index') }}">
+                                    <span class="sub-item {{ $submenu == 'notifikasi' ? 'active' : ''  }}">Data Notifikasi</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                </li>
+                <li class="nav-item {{ $menu == 'transaksi' ? 'active' : ''  }}">
+                    <a data-toggle="collapse" href="#transaksi">
+                        <i class="fas fa-money-bill"></i>
+                        <p>Transaksi</p>
+                        <span class="caret"></span>
+                    </a>
+                    <div class="collapse" id="transaksi">
+                        <ul class="nav nav-collapse">
+                            <li>
+                                <a href="{{ route('pembayaran.index') }}">
+                                    <span class="sub-item {{ $submenu == 'pembayaran' ? 'active' : ''  }}">Pembayaran Pelanggan</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('pelanggan.lunas') }}">
+                                    <span class="sub-item {{ $submenu == 'lunas' ? 'active' : ''  }}">Pelanggan Lunas</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ route('pelanggan.belum_lunas') }}">
+                                    <span class="sub-item {{ $submenu == 'belumlunas' ? 'active' : ''  }}">Pelanggan Belum Lunas</span>
+                                </a>
+                            </li>
+
                         </ul>
                     </div>
 
