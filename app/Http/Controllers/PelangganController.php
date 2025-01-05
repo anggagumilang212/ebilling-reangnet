@@ -321,24 +321,26 @@ class PelangganController extends Controller
 
             // Simpan data pelanggan ke database
             $pelanggan = Pelanggan::create(array_merge(
-                $request->only(['nama', 'jenis', 'alamat', 'no_hp', 'tgl_daftar', 'router_id', 'metode', 'titik_koordinat', 'package_id']),
+                $request->only(['nama', 'jenis', 'alamat', 'no_hp', 'tgl_daftar', 'router_id', 'metode', 'titik_koordinat', 'package_id', 'tanggal_jatuh_tempo']),
                 $pppoeDetails,
                 ['ktp' => $ktpPath ?? null]
             ));
 
-            // Siapkan data untuk template
-            $data = [
-                'nama' => $pelanggan->nama,
-                'paket' => $package->nama,
-                'tagihan' => number_format($package->harga, 0, ',', '.'),
-                'tanggal' => now()->format('d-m-Y')
-            ];
-            // Proses template pesan
-            $message = MessageHelper::processTemplate('pelanggan_baru', $data);
+            // Kirim pesan hanya jika jenis adalah "baru"
+            if ($pelanggan->jenis === 'baru') {
+                $data = [
+                    'nama' => $pelanggan->nama,
+                    'paket' => $package->nama,
+                    'tagihan' => number_format($package->harga, 0, ',', '.'),
+                    'tanggal' => now()->format('d-m-Y'),
+                ];
 
-            if ($message && $pelanggan->no_hp) {
-                $whatsapp = new WhatsappService();
-                $whatsapp->sendMessage($pelanggan->no_hp, $message);
+                $message = MessageHelper::processTemplate('pelanggan_baru', $data);
+
+                if ($message && $pelanggan->no_hp) {
+                    $whatsapp = new WhatsappService();
+                    $whatsapp->sendMessage($pelanggan->no_hp, $message);
+                }
             }
             Alert::success('Success', 'Berhasil menambahkan pelanggan.');
             return redirect()->route('pelanggan.index');
@@ -790,7 +792,7 @@ class PelangganController extends Controller
 
             // Update database record
             $pelanggan->update(array_merge(
-                $request->only(['nama', 'jenis', 'alamat', 'no_hp', 'tgl_daftar', 'router_id', 'metode', 'titik_koordinat', 'package_id']),
+                $request->only(['nama', 'jenis', 'alamat', 'no_hp', 'tgl_daftar', 'router_id', 'metode', 'titik_koordinat', 'package_id', 'tanggal_jatuh_tempo']),
                 $pppoeDetails,
                 ['ktp' => $ktpPath ?? $pelanggan->ktp]
             ));
@@ -808,7 +810,52 @@ class PelangganController extends Controller
     }
 
 
+    public function sendReminder(Request $request)
+    {
+        try {
+            $pelanggan = Pelanggan::where('tanggal_jatuh_tempo', $request->tanggal_jatuh_tempo)
+                ->get();
 
+            $berhasil = 0;
+            $gagal = 0;
+
+            foreach ($pelanggan as $p) {
+                try {
+                    // Siapkan data untuk template
+                    $data = [
+                        'nama' => $p->nama,
+                        'paket' => $p->package->nama,
+                        'tagihan' => number_format($p->package->harga, 0, ',', '.'),
+                        'tanggal' => now()->format('d-m-Y'),
+                        'tanggal_jatuh_tempo' => $request->tanggal_jatuh_tempo
+                    ];
+
+                    // Pilih template berdasarkan tipe pesan
+
+                    // Proses template pesan
+                    $message = MessageHelper::processTemplate('peringatan_jatuh_tempo', $data);
+
+
+                    if ($message && $p->no_hp) {
+                        $whatsapp = new WhatsappService();
+                        $whatsapp->sendMessage($p->no_hp, $message);
+                        $berhasil++;
+                    } else {
+                        $gagal++;
+                    }
+                } catch (\Exception $e) {
+                    $gagal++;
+                    Log::error('Error sending WhatsApp message: ' . $e->getMessage());
+                    continue;
+                }
+            }
+            Alert::success('Success', "Berhasil mengirim $berhasil pesan, Gagal mengirim $gagal pesan");
+            return redirect()->back()->with('success', "Berhasil mengirim $berhasil pesan, Gagal mengirim $gagal pesan");
+        } catch (\Exception $e) {
+            Alert::error('Error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
 
     public function delete($id)
     {

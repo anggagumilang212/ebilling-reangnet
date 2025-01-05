@@ -111,18 +111,33 @@
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group form-group-default">
-                                            <label>Paket Internet</label>
-                                            <select name="package_id" class="form-control">
-                                                <option>Pilih</option>
-                                                @foreach ($packages as $package)
-                                                    <option value="{{ $package->id }}">{{ $package->nama }} - Rp
-                                                        {{ number_format($package->harga, 0, ',', '.') }} - {{ $package->kecepatan }} | {{ $package->router->name }} - {{ $package->profile }}</option>
-                                                @endforeach
-                                            </select>
+                                                <label>Paket Internet</label>
+                                                <select name="package_id" class="form-control">
+                                                    <option>Pilih</option>
+                                                    @foreach ($packages as $package)
+                                                        <option value="{{ $package->id }}">{{ $package->nama }} - Rp
+                                                            {{ number_format($package->harga, 0, ',', '.') }} -
+                                                            {{ $package->kecepatan }} | {{ $package->router->name }} -
+                                                            {{ $package->profile }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Tanggal Jatuh Tempo</label>
+                                                <select name="tanggal_jatuh_tempo" class="form-control">
+                                                    <option>Pilih</option>
+                                                    @for ($i = 1; $i <= 31; $i++)
+                                                        <option value="{{ $i }}">
+                                                            TANGGAL {{ $i }}
+                                                        </option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group form-group-default">
                                                 <label>Alamat</label>
                                                 <textarea name="alamat" class="form-control"></textarea>

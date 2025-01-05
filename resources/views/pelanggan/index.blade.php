@@ -33,213 +33,35 @@
                                     <i class="fa fa-plus"></i>
                                     Tambah Pelanggan
                                 </a>
+                                
                             </div>
                         </div>
                         <div class="card-body">
-                            <!-- Modal Add-->
-                            <div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header no-bd">
-                                            <h5 class="modal-title">
-                                                <span class="fw-mediumbold">
-                                                    New</span>
-                                                <span class="fw-light">
-                                                    Pelanggan
-                                                </span>
-                                            </h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
+                            <form action="{{ route('pelanggan.send-reminder') }}" method="POST" id="reminderForm">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>Pilih Tanggal Jatuh Tempo</label>
+                                            <select name="tanggal_jatuh_tempo" class="form-control" required>
+                                                <option value="">Pilih</option>
+                                                @for ($i = 1; $i <= 31; $i++)
+                                                    <option value="{{ $i }}">TANGGAL {{ $i }}</option>
+                                                @endfor
+                                            </select>
+                                        </div>
+                                    </div>
+                                 
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label>&nbsp;</label>
+                                            <button type="submit" class="btn btn-primary  d-block">
+                                                <i class="fa fa-paper-plane mr-2"></i> Kirim Pesan Peringatan
                                             </button>
                                         </div>
-                                        <div class="modal-body">
-                                            <!-- <p class="small">Create a new row using this form, make sure you fill them all</p> -->
-                                            <form action="{{ route('pelanggan.add') }}" method="POST"
-                                                enctype="multipart/form-data">
-                                                @csrf
-                                                <div class="row">
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Jenis Pelanggan</label>
-                                                            <select name="jenis" id="jenis" class="form-control">
-                                                                <option value="" selected disabled>Pilih</option>
-                                                                <option value="baru">Baru</option>
-                                                                <option value="lama">Lama</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Nama Pelanggan</label>
-                                                            <input name="nama" type="text" id="user"
-                                                                class="form-control" placeholder="Nama" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Tanggal Daftar</label>
-                                                            <input name="tgl_daftar" type="date" id="user"
-                                                                class="form-control" placeholder="Tanggal Daftar" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default">
-                                                            <label>No Hp/WA</label>
-                                                            <input name="no_hp" type="text" id="no_hp"
-                                                                class="form-control" placeholder="No Hp/WA" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Foto KTP</label>
-                                                            <input name="ktp" type="file" id="ktp"
-                                                                class="form-control" placeholder="No Hp/WA" required>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-sm-12">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Alamat</label>
-                                                            <textarea name="alamat" id="" class="form-control"></textarea>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-12">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Router</label>
-                                                            <select name="router_id" id="router_id" class="form-control"
-                                                                placeholder="Profile">
-                                                                <option>Pilih</option>
-                                                                @foreach ($routers as $data)
-                                                                    <option value="{{ $data['id'] }}">{{ $data['name'] }}
-                                                                    </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Metode koneksi -->
-                                                    <div class="col-md-12">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Metode Koneksi</label>
-                                                            <select name="metode" id="metode" class="form-control"
-                                                                placeholder="metode">
-                                                                <option>Pilih</option>
-                                                                <option value="buat_baru">Buat Baru</option>
-                                                                <option value="sinkronisasi">Sinkronisasi</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- Metode sinkronisasi pppoe -->
-                                                    <div class="col-md-12 sync-section" style="display: none;">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Secret</label>
-                                                            <select id="secret_id" class="form-control select2-container"
-                                                                style="width: 100%">
-                                                                <option></option>
-                                                            </select>
-                                                        </div>
-                                                        <!-- Hidden fields for sync data -->
-                                                        <input type="hidden" id="sync_username" name="sync_username">
-                                                        <input type="hidden" id="sync_password" name="sync_password">
-                                                        <input type="hidden" id="sync_service" name="sync_service">
-                                                        <input type="hidden" id="sync_profile" name="sync_profile">
-                                                        <input type="hidden" id="sync_local_address"
-                                                            name="sync_local_address">
-                                                        <input type="hidden" id="sync_remote_address"
-                                                            name="sync_remote_address">
-                                                    </div>
-
-                                                    <!-- Metode membuat pppoe -->
-                                                    <div class="new-pppoe-section" style="display: none;">
-                                                        <!-- Username -->
-                                                        <div class="col-md-12">
-                                                            <div class="form-group form-group-default">
-                                                                <label>Username</label>
-                                                                <input name="user" type="text" class="form-control"
-                                                                    placeholder="Username">
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Password -->
-                                                        <div class="col-md-12">
-                                                            <div class="form-group form-group-default">
-                                                                <label>Password</label>
-                                                                <input name="password" type="text"
-                                                                    class="form-control" placeholder="Password">
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Service -->
-                                                        <div class="col-md-12">
-                                                            <div class="form-group form-group-default">
-                                                                <label>Service</label>
-                                                                <select name="service" id="service"
-                                                                    class="form-control">
-                                                                    <option value="" selected disabled>Pilih</option>
-                                                                    <option value="any">ANY</option>
-                                                                    <option value="async">ASYNC</option>
-                                                                    <option value="pppoe">PPPoE</option>
-                                                                    <option value="pptp">PPTP</option>
-                                                                    <option value="sstp">SSTP</option>
-                                                                    <option value="l2tp">L2TP</option>
-                                                                    <option value="ovpn">OVPN</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Profile -->
-                                                        <div class="col-md-12">
-                                                            <div class="form-group form-group-default">
-                                                                <label>Profile</label>
-                                                                <select name="profile" id="profile"
-                                                                    class="form-control">
-                                                                    <option disabled selected value="">Pilih</option>
-                                                                </select>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Local & Remote Address dalam satu row -->
-                                                        <div class="col-md-12">
-                                                            <div class="row">
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group form-group-default">
-                                                                        <label>Local Address</label>
-                                                                        <input name="localaddress" id="localaddress"
-                                                                            type="text" class="form-control"
-                                                                            placeholder="Local Address">
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-6">
-                                                                    <div class="form-group form-group-default">
-                                                                        <label>Remote Address</label>
-                                                                        <input name="remoteaddress" id="remoteaddress"
-                                                                            class="form-control"
-                                                                            placeholder="Remote Address">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Comment -->
-                                                        <div class="col-md-12">
-                                                            <div class="form-group form-group-default">
-                                                                <label>Comment</label>
-                                                                <input name="comment" id="comment" type="text"
-                                                                    class="form-control" placeholder="Comment">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                        </div>
-                                        <div class="modal-footer no-bd">
-                                            <button type="button" class="btn btn-danger"
-                                                data-dismiss="modal">Batal</button>
-                                            <button type="submit" class="btn btn-primary">Simpan</button>
-                                        </div>
-                                        </form>
                                     </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
 
 
@@ -252,6 +74,7 @@
                                         <th>Nama</th>
                                         <th>No HP</th>
                                         <th>Tanggal Daftar</th>
+                                        <th>Jatuh Tempo</th>
                                         <th>Ktp</th>
                                         <th>Paket</th>
                                         <th>Status</th>
@@ -266,6 +89,7 @@
                                         <th>Nama</th>
                                         <th>No HP</th>
                                         <th>Tanggal Daftar</th>
+                                        <th>Jatuh Tempo</th>
                                         <th>Ktp</th>
                                         <th>Paket</th>
                                         <th>Status</th>
@@ -281,9 +105,8 @@
                                             <td>{{ $item->nama ?? '' }} </td>
                                             <td>{{ $item->no_hp ?? '' }} </td>
                                             <td>{{ Carbon\Carbon::parse($item->tgl_daftar)->format('d F Y') }} </td>
+                                            <td>Tanggal {{ $item->tanggal_jatuh_tempo ?? '' }} </td>
                                             <td class="text-center">
-                                                {{-- <img src="{{ $item->ktp ?? '' }}" alt=""
-                                                    style="width: 50px"> --}}
                                                 <div class="d-flex align-items-center gap-2" style="max-width: 150px;">
                                                     @if ($item->ktp)
                                                         <a href="{{ asset($item->ktp) }}"

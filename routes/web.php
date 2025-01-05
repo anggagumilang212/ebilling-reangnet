@@ -53,6 +53,8 @@ Route::post('pelanggan/add', [PelangganController::class, 'add'])->name('pelangg
 Route::get('pelanggan/edit/{id}', [PelangganController::class, 'edit'])->name('pelanggan.edit');
 Route::post('pelanggan/update', [PelangganController::class, 'update'])->name('pelanggan.update');
 Route::get('pelanggan/delete/{id}', [PelangganController::class, 'delete'])->name('pelanggan.delete');
+// peringatan jatuh tempo
+Route::post('/pelanggan/send-reminder', [PelangganController::class, 'sendReminder'])->name('pelanggan.send-reminder');
 
 // Fitur Router
 Route::get('router', [RouterController::class, 'index'])->name('router.index');

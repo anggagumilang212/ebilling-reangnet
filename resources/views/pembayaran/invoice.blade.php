@@ -166,9 +166,9 @@
                 </div>
                 <div class="divider"></div>
                 <div style="display: flex; justify-content: space-between;">
-                    <div>Pelanggan: {{ $pembayaran->pelanggan->nama }}</div>
+                    <div>Pelanggan: {{ $pembayaran->pelanggan->nama ?? '' }}</div>
                 </div>
-                <div>Alamat: {{ $pembayaran->pelanggan->alamat }}</div>
+                <div>Alamat: {{ $pembayaran->pelanggan->alamat ?? '' }}</div>
             </div>
 
             <div class="divider"></div>
@@ -177,7 +177,7 @@
                 <div class="item">
                     <div class="item-name">Pembayaran Wifi {{ $pembayaran->periode }}</div>
                     <div class="item-detail">
-                        <div>Paket: {{ $pembayaran->pelanggan->package->nama }}</div>
+                        <div>Paket: {{ $pembayaran->pelanggan->package->nama ?? '' }}</div>
 
                     </div>
                     <div class="item-detail">

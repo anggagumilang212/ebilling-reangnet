@@ -133,7 +133,20 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Tanggal Jatuh Tempo</label>
+                                                <select name="tanggal_jatuh_tempo" class="form-control">
+                                                    @for ($i = 1; $i <= 31; $i++)
+                                                        <option value="{{ $i }}"
+                                                            {{ old('tanggal_jatuh_tempo', $pelanggan->tanggal_jatuh_tempo ?? '') == $i ? 'selected' : '' }}>
+                                                           TANGGAL {{ $i }}
+                                                        </option>
+                                                    @endfor
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
                                             <div class="form-group form-group-default">
                                                 <label>Alamat</label>
                                                 <textarea name="alamat" class="form-control">{{ $pelanggan->alamat }}</textarea>

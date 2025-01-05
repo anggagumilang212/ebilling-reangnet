@@ -157,8 +157,8 @@
                                     @foreach ($pembayaran as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $item->pelanggan->nama }}</td>
-                                            <td>{{ $item->pelanggan->alamat }}</td>
+                                            <td>{{ $item->pelanggan->nama ?? '' }}</td>
+                                            <td>{{ $item->pelanggan->alamat ?? '' }}</td>
                                             <td>{{ $item->periode ?? 'Tidak ada periode' }}</td>
                                             <td>{{ $item->tgl_pembayaran ? \Carbon\Carbon::parse($item->tgl_pembayaran)->format('d M Y') : 'Belum ada tanggal' }}
                                             </td>
@@ -207,7 +207,7 @@
                                                     <a href="{{ route('pembayaran.delete', $item->id) }}"
                                                         class="btn btn-link btn-danger btn-lg" data-toggle="tooltip"
                                                         data-original-title="Hapus"
-                                                        onclick="return confirm('Apakah anda yakin menghapus Pembayaran {{ $item->pelanggan->nama }} Periode {{ $item->periode }} ?')">
+                                                        onclick="return confirm('Apakah anda yakin menghapus Pembayaran {{ $item->pelanggan->nama ?? '' }} Periode {{ $item->periode ?? '' }} ?')">
                                                         <i class="fa fa-times"></i>
                                                     </a>
 
@@ -249,7 +249,7 @@
                 printWindow.onload = function() {
                     printWindow.print();
                     // Opsional: Tutup window setelah print
-                    // printWindow.close();
+                    printWindow.close();
                 };
             });
         </script>

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('ktp');
             $table->string('titik_koordinat')->nullable();
             $table->string('alamat');
+            $table->integer('tanggal_jatuh_tempo');
             $table->string('status')->default('aktif');
             $table->string('service')->default('default');
             $table->string('profile')->default('default');
