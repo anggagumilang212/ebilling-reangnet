@@ -28,24 +28,24 @@
                     </a>
                     <div class="collapse" id="keloladata">
                         <ul class="nav nav-collapse">
-                            <li>
+                            <li class="{{ $submenu == 'pelanggan' ? 'active' : ''  }}">
                                 <a href="{{ route('pelanggan.index') }}">
-                                    <span class="sub-item {{ $submenu == 'pelanggan' ? 'active' : ''  }}">Data Pelanggan</span>
+                                    <span class="sub-item ">Data Pelanggan</span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="{{ $submenu == 'router' ? 'active' : ''  }}">
                                 <a href="{{ route('router.index') }}">
-                                    <span class="sub-item {{ $submenu == 'router' ? 'active' : ''  }}">Data Router</span>
+                                    <span class="sub-item ">Data Router</span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="{{ $submenu == 'paket' ? 'active' : ''  }}">
                                 <a href="{{ route('package.index') }}">
-                                    <span class="sub-item {{ $submenu == 'paket' ? 'active' : ''  }}">Data Paket</span>
+                                    <span class="sub-item ">Data Paket</span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="{{ $submenu == 'notifikasi' ? 'active' : ''  }}">
                                 <a href="{{ route('notifikasi.index') }}">
-                                    <span class="sub-item {{ $submenu == 'notifikasi' ? 'active' : ''  }}">Data Notifikasi</span>
+                                    <span class="sub-item ">Data Notifikasi</span>
                                 </a>
                             </li>
                         </ul>
@@ -60,19 +60,19 @@
                     </a>
                     <div class="collapse" id="transaksi">
                         <ul class="nav nav-collapse">
-                            <li>
+                            <li class="{{ $submenu == 'pembayaran' ? 'active' : ''  }}">
                                 <a href="{{ route('pembayaran.index') }}">
-                                    <span class="sub-item {{ $submenu == 'pembayaran' ? 'active' : ''  }}">Pembayaran Pelanggan</span>
+                                    <span class="sub-item ">Pembayaran Pelanggan</span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="{{ $submenu == 'lunas' ? 'active' : ''  }}">
                                 <a href="{{ route('pelanggan.lunas') }}">
-                                    <span class="sub-item {{ $submenu == 'lunas' ? 'active' : ''  }}">Pelanggan Lunas</span>
+                                    <span class="sub-item">Pelanggan Lunas</span>
                                 </a>
                             </li>
-                            <li>
+                            <li class="{{ $submenu == 'belumlunas' ? 'active' : ''  }}">
                                 <a href="{{ route('pelanggan.belum_lunas') }}">
-                                    <span class="sub-item {{ $submenu == 'belumlunas' ? 'active' : ''  }}">Pelanggan Belum Lunas</span>
+                                    <span class="sub-item ">Pelanggan Belum Lunas</span>
                                 </a>
                             </li>
 
@@ -89,9 +89,9 @@
                     </a>
                     <div class="collapse" id="laporan">
                         <ul class="nav nav-collapse">
-                            <li>
+                            <li class="{{ $submenu == 'belumjadi' ? 'active' : ''  }}">
                                 <a href="#">
-                                    <span class="sub-item {{ $submenu == 'pembayaran' ? 'active' : ''  }}">Belum Jadi</span>
+                                    <span class="sub-item">Belum Jadi</span>
                                 </a>
                             </li>
                           
