@@ -48,6 +48,7 @@ Route::get('interface', [InterfaceController::class, 'index'])->name('interface.
 
 // Fitur Pelanggan
 Route::get('pelanggan', [PelangganController::class, 'index'])->name('pelanggan.index');
+Route::get('pelanggan/data', [PelangganController::class, 'data'])->name('pelanggan.data');
 Route::get('pelanggan/create', [PelangganController::class, 'create'])->name('pelanggan.create');
 Route::post('pelanggan/add', [PelangganController::class, 'add'])->name('pelanggan.add');
 Route::get('pelanggan/edit/{id}', [PelangganController::class, 'edit'])->name('pelanggan.edit');
@@ -55,6 +56,12 @@ Route::post('pelanggan/update', [PelangganController::class, 'update'])->name('p
 Route::get('pelanggan/delete/{id}', [PelangganController::class, 'delete'])->name('pelanggan.delete');
 // peringatan jatuh tempo
 Route::post('/pelanggan/send-reminder', [PelangganController::class, 'sendReminder'])->name('pelanggan.send-reminder');
+// pelanggan import
+Route::post('/pelanggan/import', [PelangganController::class, 'import'])->name('pelanggan.import');
+// link invoice
+Route::get('/invoice/{id}', [PembayaranController::class, 'showInvoice'])->name('invoice.show');
+
+
 
 // Fitur Router
 Route::get('router', [RouterController::class, 'index'])->name('router.index');

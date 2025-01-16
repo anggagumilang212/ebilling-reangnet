@@ -1,4 +1,4 @@
-@extends('layouts.layouts', ['menu' => 'transaksi', 'submenu' => 'belumlunas'])
+@extends('layouts.layouts', ['menu' => 'laporan', 'submenu' => 'belumlunas'])
 
 @section('title', 'Data Pelanggan Belum Lunas')
 
@@ -100,7 +100,7 @@
                                                         <i class="fa fa-money-bill"></i>
                                                     </a>
 
-                                                   
+
                                                 </div>
                                             </td>
                                         </tr>

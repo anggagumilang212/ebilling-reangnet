@@ -31,24 +31,19 @@ class PembayaranController extends Controller
 
     public function add(Request $request)
     {
-
         try {
-
-
-
             // Cek apakah sudah ada pembayaran untuk pelanggan ini di periode yang sama
             $existingPayment = Pembayaran::where('id_pelanggan', $request->id_pelanggan)
                 ->where('periode', $request->periode)
                 ->where('status', 'Lunas')
                 ->first();
 
-            // Jika sudah ada pembayaran, kembalikan dengan pesan error
             if ($existingPayment) {
                 Alert::error('Error', 'Pelanggan sudah melakukan pembayaran di periode bulan ini.');
                 return redirect()->back();
             }
 
-            // Jika belum ada pembayaran, lanjutkan proses
+            // Simpan bukti pembayaran
             $buktiPath = null;
             if ($request->hasFile('bukti')) {
                 $fileName = $request->file('bukti')->getClientOriginalName();
@@ -59,7 +54,6 @@ class PembayaranController extends Controller
                 $request->file('bukti')->move($filePath, $fileName);
                 $buktiPath = 'bukti/' . $fileName;
             }
-
 
             // Buat pembayaran baru
             $pembayaran = Pembayaran::create([
@@ -76,15 +70,15 @@ class PembayaranController extends Controller
             $pelanggan = Pelanggan::with('package')->find($request->id_pelanggan);
 
             if ($pelanggan) {
-                // Siapkan data untuk template
                 $data = [
                     'nama' => $pelanggan->nama,
                     'periode' => $request->periode,
                     'jumlah' => number_format($request->jumlah, 0, ',', '.'),
-                    'tanggal' => Carbon::parse($request->tgl_pembayaran)->format('d-m-Y')
+                    'tanggal' => Carbon::parse($request->tgl_pembayaran)->format('d-m-Y'),
+                    'link_invoice' => route('invoice.show', ['id' => $pembayaran->id]),
                 ];
 
-                // Proses template pesan dengan kategori pembayaran berhasil
+                // Proses template pesan
                 $message = MessageHelper::processTemplate('pembayaran_berhasil', $data);
 
                 if ($message && $pelanggan->no_hp) {
@@ -103,6 +97,13 @@ class PembayaranController extends Controller
             return redirect()->back();
         }
     }
+    public function showInvoice($id)
+    {
+        $pembayaran = Pembayaran::with('pelanggan')->findOrFail($id);
+
+        return view('pembayaran.invoicelink', compact('pembayaran'));
+    }
+
 
     public function showLunas()
     {

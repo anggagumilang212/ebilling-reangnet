@@ -518,7 +518,8 @@
 
             function formatSecret(secret) {
                 if (!secret.id) return secret.text;
-                return $(`<span>${secret.text} ${secret.profile ? `(${secret.profile})` : ''}</span>`);
+                // return $(`<span>${secret.text} ${secret.profile ? `(${secret.profile})` : ''}</span>`);
+                return $(`<span>${secret.text}</span>`);
             }
 
             // Inisialisasi awal

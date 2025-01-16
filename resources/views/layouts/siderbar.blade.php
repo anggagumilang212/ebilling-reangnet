@@ -2,7 +2,7 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
         <div class="sidebar-content">
             <ul class="nav nav-primary">
-                <li class="nav-item {{ $menu == 'dashboard' ? 'active' : ''  }}">
+                <li class="nav-item {{ $menu == 'dashboard' ? 'active' : '' }}">
                     <a href="{{ route('dashboard.index') }}">
                         <i class="fas fa-home"></i>
                         <p>Dashboard</p>
@@ -20,7 +20,7 @@
                         <p>Interface</p>
                     </a>
                 </li> --}}
-                <li class="nav-item {{ $menu == 'keloladata' ? 'active' : ''  }}">
+                <li class="nav-item {{ $menu == 'keloladata' ? 'active' : '' }}">
                     <a data-toggle="collapse" href="#keloladata">
                         <i class="fas fa-server"></i>
                         <p>Kelola Data</p>
@@ -28,22 +28,22 @@
                     </a>
                     <div class="collapse" id="keloladata">
                         <ul class="nav nav-collapse">
-                            <li class="{{ $submenu == 'pelanggan' ? 'active' : ''  }}">
+                            <li class="{{ $submenu == 'pelanggan' ? 'active' : '' }}">
                                 <a href="{{ route('pelanggan.index') }}">
                                     <span class="sub-item ">Data Pelanggan</span>
                                 </a>
                             </li>
-                            <li class="{{ $submenu == 'router' ? 'active' : ''  }}">
+                            <li class="{{ $submenu == 'router' ? 'active' : '' }}">
                                 <a href="{{ route('router.index') }}">
                                     <span class="sub-item ">Data Router</span>
                                 </a>
                             </li>
-                            <li class="{{ $submenu == 'paket' ? 'active' : ''  }}">
+                            <li class="{{ $submenu == 'paket' ? 'active' : '' }}">
                                 <a href="{{ route('package.index') }}">
                                     <span class="sub-item ">Data Paket</span>
                                 </a>
                             </li>
-                            <li class="{{ $submenu == 'notifikasi' ? 'active' : ''  }}">
+                            <li class="{{ $submenu == 'notifikasi' ? 'active' : '' }}">
                                 <a href="{{ route('notifikasi.index') }}">
                                     <span class="sub-item ">Data Notifikasi</span>
                                 </a>
@@ -52,7 +52,7 @@
                     </div>
 
                 </li>
-                <li class="nav-item {{ $menu == 'transaksi' ? 'active' : ''  }}">
+                <li class="nav-item {{ $menu == 'transaksi' ? 'active' : '' }}">
                     <a data-toggle="collapse" href="#transaksi">
                         <i class="fas fa-money-bill"></i>
                         <p>Transaksi</p>
@@ -60,28 +60,19 @@
                     </a>
                     <div class="collapse" id="transaksi">
                         <ul class="nav nav-collapse">
-                            <li class="{{ $submenu == 'pembayaran' ? 'active' : ''  }}">
+                            <li class="{{ $submenu == 'pembayaran' ? 'active' : '' }}">
                                 <a href="{{ route('pembayaran.index') }}">
                                     <span class="sub-item ">Pembayaran Pelanggan</span>
                                 </a>
                             </li>
-                            <li class="{{ $submenu == 'lunas' ? 'active' : ''  }}">
-                                <a href="{{ route('pelanggan.lunas') }}">
-                                    <span class="sub-item">Pelanggan Lunas</span>
-                                </a>
-                            </li>
-                            <li class="{{ $submenu == 'belumlunas' ? 'active' : ''  }}">
-                                <a href="{{ route('pelanggan.belum_lunas') }}">
-                                    <span class="sub-item ">Pelanggan Belum Lunas</span>
-                                </a>
-                            </li>
+
 
                         </ul>
                     </div>
 
                 </li>
 
-                <li class="nav-item {{ $menu == 'laporan' ? 'active' : ''  }}">
+                <li class="nav-item {{ $menu == 'laporan' ? 'active' : '' }}">
                     <a data-toggle="collapse" href="#laporan">
                         <i class="fas fa-clipboard"></i>
                         <p>Laporan</p>
@@ -89,19 +80,26 @@
                     </a>
                     <div class="collapse" id="laporan">
                         <ul class="nav nav-collapse">
-                            <li class="{{ $submenu == 'belumjadi' ? 'active' : ''  }}">
-                                <a href="#">
-                                    <span class="sub-item">Belum Jadi</span>
+                          
+                            <li class="{{ $submenu == 'lunas' ? 'active' : '' }}">
+                                <a href="{{ route('pelanggan.lunas') }}">
+                                    <span class="sub-item">Pelanggan Lunas</span>
                                 </a>
                             </li>
-                          
-                           
-
-                        </ul>
-                    </div>
-
+                            <li class="{{ $submenu == 'belumlunas' ? 'active' : '' }}">
+                                <a href="{{ route('pelanggan.belum_lunas') }}">
+                                    <span class="sub-item ">Pelanggan Belum Lunas</span>
+                                </a>
+                            </li>
                 </li>
-                {{-- <li class="nav-item {{ $menu == 'pppoe' ? 'active' : ''  }}">
+
+
+
+            </ul>
+        </div>
+
+        </li>
+        {{-- <li class="nav-item {{ $menu == 'pppoe' ? 'active' : ''  }}">
                     <a data-toggle="collapse" href="#base">
                         <i class="fas fa-rocket"></i>
                         <p>PPPoE</p>
@@ -123,7 +121,7 @@
                     </div>
 
                 </li> --}}
-                {{-- <li class="nav-item {{ $menu == 'hotspot' ? 'active' : ''  }}">
+        {{-- <li class="nav-item {{ $menu == 'hotspot' ? 'active' : ''  }}">
                     <a data-toggle="collapse" href="#base1">
                         <i class="fas fa-wifi"></i>
                         <p>Hotspot</p>
@@ -144,7 +142,7 @@
                         </ul>
                     </div>
                 </li> --}}
-                {{-- <li class="nav-item {{ $menu == 'report' ? 'active' : ''  }}">
+        {{-- <li class="nav-item {{ $menu == 'report' ? 'active' : ''  }}">
                     <a data-toggle="collapse" href="#base3">
                         <i class="fas fa-paste"></i>
                         <p>Report</p>
@@ -165,13 +163,13 @@
                         </ul>
                     </div>
                 </li> --}}
-                {{-- <li class="nav-item {{ $menu == 'useractive' ? 'active' : ''  }}">
+        {{-- <li class="nav-item {{ $menu == 'useractive' ? 'active' : ''  }}">
                     <a href="{{ route('user.index') }}">
                         <i class="fas fa-user-alt"></i>
                         <p>User Mikrotik Active</p>
                     </a>
                 </li> --}}
-            </ul>
-        </div>
+        </ul>
     </div>
+</div>
 </div>

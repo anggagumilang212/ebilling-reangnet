@@ -1,4 +1,4 @@
-@extends('layouts.layouts', ['menu' => 'transaksi', 'submenu' => 'lunas'])
+@extends('layouts.layouts', ['menu' => 'laporan', 'submenu' => 'lunas'])
 
 @section('title', 'Data Pelanggan Lunas')
 

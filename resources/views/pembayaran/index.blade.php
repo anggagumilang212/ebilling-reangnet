@@ -249,7 +249,7 @@
                 printWindow.onload = function() {
                     printWindow.print();
                     // Opsional: Tutup window setelah print
-                    printWindow.close();
+                    // printWindow.close();
                 };
             });
         </script>

@@ -17,9 +17,80 @@ use PEAR2\Net\RouterOS\Client;
 use App\Services\WhatsappService;
 use Illuminate\Support\Facades\Log;
 use RealRashid\SweetAlert\Facades\Alert;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\PelangganImport;
+use Yajra\DataTables\Facades\DataTables;
 
 class PelangganController extends Controller
 {
+
+
+
+
+
+    public function data(Request $request)
+    {
+        $pelanggan = Pelanggan::with(['package', 'pembayaran'])->select('pelanggans.*');
+
+        // Filter berdasarkan status jika ada
+        if ($request->has('status') && $request->status !== null) {
+            $pelanggan->where('status', $request->status);
+        }
+
+        return DataTables::of($pelanggan)
+            ->addIndexColumn()
+            ->addColumn('ktp', function ($row) {
+                if ($row->ktp) {
+                    return '<a href="' . asset($row->ktp) . '" class="btn btn-sm btn-light" download>
+                            <i class="fas fa-download"></i> Download
+                        </a>';
+                }
+                return '<span class="text-muted">No file</span>';
+            })
+            ->addColumn('pembayaran_terakhir', function ($row) {
+                $pembayaranTerakhir = optional($row->pembayaran()->latest()->first())->periode;
+                return $pembayaranTerakhir ? $pembayaranTerakhir : 'Belum ada pembayaran';
+            })
+            ->addColumn('action', function ($row) {
+                return '
+                <div class="form-button-action d-flex flex-wrap gap-1" style="min-width: 200px;">
+                    <button class="btn btn-link btn-danger btn-isolir btn-md p-1"
+                        data-toggle="tooltip" data-original-title="Isolir"
+                        data-id="' . $row->id . '">
+                        <i class="fa fa-lock"></i>
+                    </button>
+
+                    <button class="btn btn-link btn-success btn-bukaisolir btn-md p-1"
+                        data-toggle="tooltip" data-original-title="Buka Isolir"
+                        data-id="' . $row->id . '">
+                        <i class="fa fa-unlock"></i>
+                    </button>
+
+                    <a href="' . route('pembayaran.create', $row->id) . '"
+                        class="btn btn-link btn-primary btn-md p-1" data-toggle="tooltip"
+                        data-original-title="Pembayaran">
+                        <i class="fa fa-money-bill"></i>
+                    </a>
+
+                    <a href="' . route('pelanggan.edit', $row->id) . '"
+                        class="btn btn-link btn-primary btn-md p-1" data-toggle="tooltip"
+                        data-original-title="Edit">
+                        <i class="fa fa-edit"></i>
+                    </a>
+
+                    <a href="' . route('pelanggan.delete', $row->id) . '"
+                        class="btn btn-link btn-danger btn-md p-1" data-toggle="tooltip"
+                        data-original-title="Hapus"
+                        onclick="return confirm(\'Apakah anda yakin menghapus pelanggan ' . $row->nama . '?\')">
+                        <i class="fa fa-times"></i>
+                    </a>
+                </div>';
+            })
+            ->rawColumns(['ktp', 'action'])
+            ->make(true);
+    }
+
+
 
     public function index()
     {
@@ -54,7 +125,7 @@ class PelangganController extends Controller
             }
         }
 
-        // Ambil periode saat ini 
+        // Ambil periode saat ini
         $periode = Carbon::now()->translatedFormat('F Y');
 
         $pelanggan = Pelanggan::with(['pembayaran' => function ($query) use ($periode) {
@@ -62,6 +133,25 @@ class PelangganController extends Controller
         }])->get();
 
         return view('pelanggan.index', $data, compact('pelanggan', 'periode'));
+    }
+
+    public function import(Request $request)
+    {
+        try {
+            // Validasi file
+            // $request->validate([
+            //     'file' => 'required|mimes:xlsx,xls',
+            // ]);
+
+            // Proses file Excel
+            Excel::import(new PelangganImport, $request->file('file'));
+
+            Alert::success('Success', 'Data pelanggan berhasil diimpor.');
+            return redirect()->route('pelanggan.index');
+        } catch (Exception $e) {
+            Alert::error('Error', 'Gagal mengimpor data: ' . $e->getMessage());
+            return redirect()->back();
+        }
     }
 
     public function create()
@@ -639,7 +729,7 @@ class PelangganController extends Controller
 
                 // Update status pelanggan di database
                 $pelanggan->update([
-                    'status' => 'active', // Ganti dengan status yang sesuai
+                    'status' => 'aktif', // Ganti dengan status yang sesuai
                     'profile' => $profile,
                 ]);
 

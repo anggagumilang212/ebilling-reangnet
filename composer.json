@@ -11,10 +11,12 @@
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "maatwebsite/excel": "^3.1",
         "pear2/cache_shm": "^0.2.0",
         "pear2/net_routeros": "^1.0@beta",
         "realrashid/sweet-alert": "^5.0",
-        "spatie/laravel-permission": "^6.10"
+        "spatie/laravel-permission": "^6.10",
+        "yajra/laravel-datatables-oracle": "^10.11"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0",
