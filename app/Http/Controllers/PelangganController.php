@@ -23,11 +23,6 @@ use Yajra\DataTables\Facades\DataTables;
 
 class PelangganController extends Controller
 {
-
-
-
-
-
     public function data(Request $request)
     {
         $pelanggan = Pelanggan::with(['package', 'pembayaran'])->select('pelanggans.*');

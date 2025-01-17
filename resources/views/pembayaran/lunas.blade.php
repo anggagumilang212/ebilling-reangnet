@@ -27,10 +27,8 @@
                         </div>
 
 
-
-
                         <div class="table-responsive">
-                            <table id="add-row" class="display table table-striped table-hover">
+                            <table id="dataTable" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -42,7 +40,7 @@
                                         <th>Status</th>
                                         <th>Alamat</th>
                                         <th>Pembayaran Terakhir</th>
-                                        <th style="width: 10%">Action</th>
+
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -56,11 +54,63 @@
                                         <th>Status</th>
                                         <th>Alamat</th>
                                         <th>Pembayaran Terakhir</th>
-                                        <th>Action</th>
+
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    @foreach ($pelangganLunas as $item)
+                                    <script>
+
+                                            $(document).ready(function() {
+                                                $('#dataTable').DataTable({
+                                                    processing: true,
+                                                    serverSide: true,
+                                                    ajax: "{{ route('pelanggan.lunas.data') }}",
+                                                    columns: [{
+                                                            data: 'DT_RowIndex',
+                                                            name: 'DT_RowIndex',
+                                                            orderable: false,
+                                                            searchable: false
+                                                        },
+                                                        {
+                                                            data: 'nama',
+                                                            name: 'nama'
+                                                        },
+                                                        {
+                                                            data: 'no_hp',
+                                                            name: 'no_hp'
+                                                        },
+                                                        {
+                                                            data: 'tgl_daftar',
+                                                            name: 'tgl_daftar'
+                                                        },
+                                                        {
+                                                            data: 'ktp',
+                                                            name: 'ktp',
+                                                            orderable: false,
+                                                            searchable: false
+                                                        },
+                                                        {
+                                                            data: 'package.nama',
+                                                            name: 'package.nama'
+                                                        },
+                                                        {
+                                                            data: 'status',
+                                                            name: 'status'
+                                                        },
+                                                        {
+                                                            data: 'alamat',
+                                                            name: 'alamat'
+                                                        },
+                                                        {
+                                                            data: 'periode',
+                                                            name: 'periode',
+                                                            orderable: false
+                                                        },
+                                                    ]
+                                                });
+                                            });
+                                    </script>
+                                    {{-- @foreach ($pelangganLunas as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }} </td>
                                             <td>{{ $item->nama ?? '' }} </td>
@@ -91,18 +141,9 @@
                                                 {{ optional($item->pembayaran()->latest()->first())->periode ?? 'Belum ada pembayaran' }}
                                             </td>
 
-                                            <td>
-                                                <div class="form-button-action d-flex flex-wrap gap-1"
-                                                    style="min-width: 200px;">
-                                                    <a href="{{ route('pembayaran.create', $item->id) }}"
-                                                        class="btn btn-link btn-primary btn-lg p-1" data-toggle="tooltip"
-                                                        data-original-title="Pembayaran">
-                                                        <i class="fa fa-money-bill"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
+
                                         </tr>
-                                    @endforeach
+                                    @endforeach --}}
                                 </tbody>
                             </table>
                         </div>

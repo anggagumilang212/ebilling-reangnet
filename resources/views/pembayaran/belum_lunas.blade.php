@@ -30,7 +30,7 @@
 
 
                         <div class="table-responsive">
-                            <table id="add-row" class="display table table-striped table-hover">
+                            <table id="dataTable" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -60,7 +60,66 @@
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    @foreach ($pelangganBelumLunas as $item)
+                                    <script>
+                                        $(document).ready(function() {
+                                            $('#dataTable').DataTable({
+                                                processing: true,
+                                                serverSide: true,
+                                                ajax: "{{ route('pelanggan.belum-lunas.data') }}",
+                                                columns: [{
+                                                        data: 'DT_RowIndex',
+                                                        name: 'DT_RowIndex',
+                                                        orderable: false,
+                                                        searchable: false
+                                                    },
+                                                    {
+                                                        data: 'nama',
+                                                        name: 'nama'
+                                                    },
+                                                    {
+                                                        data: 'no_hp',
+                                                        name: 'no_hp'
+                                                    },
+                                                    {
+                                                        data: 'tgl_daftar',
+                                                        name: 'tgl_daftar'
+                                                    },
+                                                    {
+                                                        data: 'ktp',
+                                                        name: 'ktp',
+                                                        orderable: false,
+                                                        searchable: false
+                                                    },
+                                                    {
+                                                        data: 'package.nama',
+                                                        name: 'package.nama'
+                                                    },
+                                                    {
+                                                        data: 'status',
+                                                        name: 'status'
+                                                    },
+                                                    {
+                                                        data: 'alamat',
+                                                        name: 'alamat'
+                                                    },
+                                                    {
+                                                        data: 'periode',
+                                                        name: 'periode',
+                                                        orderable: false,
+                                                        
+                                                    },
+                                                    {
+                                                        data: 'action',
+                                                        name: 'action',
+                                                        orderable: false,
+                                                        searchable: false
+                                                    },
+                                                ]
+                                            });
+                                        });
+                                    </script>
+
+                                    {{-- @foreach ($pelangganBelumLunas as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }} </td>
                                             <td>{{ $item->nama ?? '' }} </td>
@@ -104,7 +163,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @endforeach --}}
                                 </tbody>
                             </table>
                         </div>

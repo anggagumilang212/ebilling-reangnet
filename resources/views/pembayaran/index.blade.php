@@ -122,7 +122,7 @@
 
 
                         <div class="table-responsive">
-                            <table id="add-row" class="display table table-striped table-hover">
+                            <table id="server-side" class="display table table-striped table-hover">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -154,7 +154,78 @@
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    @foreach ($pembayaran as $item)
+                                    <script>
+                                        $(document).ready(function() {
+                                            const table = $('#server-side').DataTable({
+                                                processing: true,
+                                                serverSide: true,
+                                                ajax: {
+                                                    url: "{{ route('pembayaran.data') }}",
+
+                                                },
+                                                columns: [{
+                                                        data: 'DT_RowIndex',
+                                                        name: 'DT_RowIndex',
+                                                        orderable: false,
+                                                        searchable: false
+                                                    },
+                                                    {
+                                                        data: 'pelanggan_nama',
+                                                        name: 'pelanggan.nama'
+                                                    },
+                                                    {
+                                                        data: 'pelanggan_alamat',
+                                                        name: 'pelanggan.alamat'
+                                                    },
+                                                    {
+                                                        data: 'periode',
+                                                        name: 'periode'
+                                                    },
+                                                    {
+                                                        data: 'tgl_pembayaran',
+                                                        name: 'tgl_pembayaran'
+                                                    },
+                                                    {
+                                                        data: 'package_nama',
+                                                        name: 'pelanggan.package.nama'
+                                                    },
+                                                    {
+                                                        data: 'jumlah',
+                                                        name: 'jumlah'
+                                                    },
+                                                    {
+                                                        data: 'metode',
+                                                        name: 'metode'
+                                                    },
+                                                    {
+                                                        data: 'status_badge',
+                                                        name: 'status',
+                                                        orderable: false,
+                                                        searchable: false
+                                                    },
+                                                    {
+                                                        data: 'bukti',
+                                                        name: 'bukti',
+                                                        orderable: false,
+                                                        searchable: false
+                                                    },
+                                                    {
+                                                        data: 'action',
+                                                        name: 'action',
+                                                        orderable: false,
+                                                        searchable: false
+                                                    },
+                                                ]
+                                            });
+
+                                            // Tooltip inisialisasi ulang
+                                            table.on('draw.dt', function() {
+                                                $('[data-toggle="tooltip"]').tooltip();
+                                            });
+                                        });
+                                    </script>
+
+                                    {{-- @foreach ($pembayaran as $item)
                                         <tr>
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $item->pelanggan->nama ?? '' }}</td>
@@ -198,11 +269,6 @@
                                                             <i class="fa fa-print"></i>
                                                         </a>
                                                     @endif
-                                                    {{-- <a href="javascript:void(0)"
-                                                        class="btn btn-link btn-primary btn-lg btn-edit-router"
-                                                        data-original-title="Edit">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a> --}}
 
                                                     <a href="{{ route('pembayaran.delete', $item->id) }}"
                                                         class="btn btn-link btn-danger btn-lg" data-toggle="tooltip"
@@ -214,7 +280,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                    @endforeach
+                                    @endforeach --}}
 
                                 </tbody>
                             </table>

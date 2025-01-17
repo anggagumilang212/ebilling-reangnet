@@ -90,10 +90,13 @@ Route::get('pppoe/secret/delete/{id}', [PPPoEController::class, 'delete'])->name
 
 // fitur pembayaran
 Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran.index');
+Route::get('/pembayaran/data', [PembayaranController::class, 'data'])->name('pembayaran.data');
 Route::get('/pembayaran/create/{id}', [PembayaranController::class, 'create'])->name('pembayaran.create');
 Route::post('/pembayaran/add', [PembayaranController::class, 'add'])->name('pembayaran.add');
 Route::get('/pembayaran/delete/{id}', [PembayaranController::class, 'delete'])->name('pembayaran.delete');
+Route::get('/pelanggan-lunas/data', [PembayaranController::class, 'dataLunas'])->name('pelanggan.lunas.data');
 Route::get('/pelanggan/lunas', [PembayaranController::class, 'showLunas'])->name('pelanggan.lunas');
+Route::get('/pelanggan/belum-lunas/data', [PembayaranController::class, 'getBelumLunasData'])->name('pelanggan.belum-lunas.data');
 Route::get('/pelanggan/belum-lunas', [PembayaranController::class, 'showBelumLunas'])->name('pelanggan.belum_lunas');
 Route::get('/pembayaran/filter', [PembayaranController::class, 'filterPembayaran'])->name('pembayaran.filter');
 Route::get('/pembayaran/invoice/{id}', [PembayaranController::class, 'invoice'])->name('pembayaran.invoice');
